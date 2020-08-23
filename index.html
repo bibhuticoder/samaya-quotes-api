@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samaya Quotes API</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta&display=swap" rel="stylesheet">
+    <style>
+        html {
+            background: url(./background.jpg) no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Mukta', sans-serif;
+        }
+
+        .content {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            /* background-color: rgba(0, 0, 0, 0.1); */
+        }
+
+        .credits {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            color: whitesmoke;
+        }
+
+        p.intro {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        p.photographer {
+            font-size: 0.9rem;
+            margin-top: 0;
+        }
+
+        .quote {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            left: 50%;
+            width: 80%;
+        }
+
+        .quote .text {
+            font-size: 3rem;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .quote .author {
+            font-size: 1rem;
+            text-align: center;
+            color: white;
+            font-style: italic;
+        }
+
+        .quote .btnRandom {
+            max-width: 100px;
+            border: 1px solid white;
+            border-radius: 40px;
+            padding: 0.25rem 1rem;
+            color: white;
+            background: transparent;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.25s ease-in-out;
+            margin: 0 auto;
+            margin-top: 100px;
+            font-size: 0.9rem;
+        }
+
+        .btnRandom:hover {
+            background-color: white;
+            color: #373737;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <div class="quote">
+            <div class="text" id="randomQuoteText">
+                समस्या, समस्या होइन। समस्या त समस्याको बारेमा तपाईंको दृष्टिकोण हो।
+            </div>
+            <div class="author" id="randomQuoteAuthor">
+                UNknown
+            </div>
+
+            <div class="btnRandom" id="btnRandom">
+                Random
+            </div>
+        </div>
+
+        <div class="credits">
+            <p class="intro">
+                Ulleri, Bhuktangle, Nepal
+            </p>
+            <p class="photographer">
+                Azin Javadzadeh | Unsplash
+            </p>
+        </div>
+    </div>
+
+    <script>
+
+        function getRandomQuote() {
+            fetch('./quotes/metadata.json').then(r => r.json()).then(metadata => {
+                let randomPage = random(1, metadata.totalPages);
+                fetch('./quotes/' + randomPage + '.json').then(r => r.json()).then(quotesData => {
+                    let randomQuote = quotesData[random(0, quotesData.length - 1)];
+                    document.getElementById("randomQuoteText").innerHTML = randomQuote.text;
+                    document.getElementById('randomQuoteAuthor').innerHTML = randomQuote.author;
+                })
+            })
+        }
+
+        function random(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        getRandomQuote();
+        document.getElementById('btnRandom').onclick = () => getRandomQuote();
+
+    </script>
+</body>
+
+</html>
