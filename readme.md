@@ -1,9 +1,7 @@
 # Samaya-Quotes-API
 
-This repository contains the quotes used by Samaya Chrome Extension.
-
-## Demo
-https://bibhuticoder.github.io/samaya-quotes-api
+This repository contains the quotes used by Samaya Chrome Extension. 
+[Install Chrome Extension](https://chrome.google.com/webstore/detail/samaya/jmpipanemahgfelokjjpdilfcfboinni)
 
 ## API Structure
 The `metadata.json` file contains all the required information for the API. The quotes are seperated into pages to minimize network data usage. Featured array in metadata contains page No of featured quotes.
@@ -33,3 +31,6 @@ The `metadata.json` file contains all the required information for the API. The 
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 ```
+
+## View Quotes
+https://bibhuticoder.github.io/samaya-quotes-api
