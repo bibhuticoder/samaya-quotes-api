@@ -8,13 +8,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Mukta&display=swap" rel="stylesheet">
     <style>
         html {
-            background: url(./background.jpg) no-repeat center center fixed;
+            background: url(background.jpg) no-repeat center center fixed;
             -webkit-background-size: cover;
             -moz-background-size: cover;
             -o-background-size: cover;
             background-size: cover;
         }
-
+        html::after {
+        content: "";
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0.5;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
         body {
             margin: 0;
             padding: 0;
@@ -54,12 +64,11 @@
         }
 
         .quote .text {
-            font-size: 3rem;
+            font-size: 2.8rem;
             text-align: center;
             color: white;
             font-weight: bold;
         }
-
         .quote .author {
             font-size: 1rem;
             text-align: center;
@@ -96,7 +105,7 @@
                 समस्या, समस्या होइन। समस्या त समस्याको बारेमा तपाईंको दृष्टिकोण हो।
             </div>
             <div class="author" id="randomQuoteAuthor">
-                UNknown
+                Unknown
             </div>
 
             <div class="btnRandom" id="btnRandom">
@@ -106,34 +115,80 @@
 
         <div class="credits">
             <p class="intro">
-                Ulleri, Bhuktangle, Nepal
-            </p>
-            <p class="photographer">
-                Azin Javadzadeh | Unsplash
+                All the Images From Unsplash.com
             </p>
         </div>
     </div>
- 
+
     <script>
+        // Array of background image URLs
+        var backgroundImages = [
+        'https://images.unsplash.com/photo-1606826995389-47c33af60af9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+        'https://images.unsplash.com/photo-1575977825185-ed5b1a5bd571?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+        'https://images.unsplash.com/photo-1611517945113-2a188c3da4f5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+        'https://images.unsplash.com/photo-1549926506-afba2eb9fb6f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+        'https://images.unsplash.com/photo-1611485045965-29bd2ab86246?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1633&q=80',
+        'https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80',
+        'https://images.unsplash.com/photo-1611485046064-16e6c74bb044?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1633&q=80',
+        'https://images.unsplash.com/flagged/photo-1549946610-80c57f08656b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1117&q=80',
+        'https://images.unsplash.com/photo-1585597800810-07a63ea8e983?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80',
+        'https://images.unsplash.com/photo-1623492701360-fb4a1205c789?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+        'https://images.unsplash.com/photo-1623268964161-a4d07243f8cc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+        'https://images.unsplash.com/photo-1544442069-97dded965a9f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80',
+        'https://images.unsplash.com/photo-1545662618-66de187bbf69?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+        'https://images.unsplash.com/photo-1589800463007-3be49fe18b92?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+        'https://images.unsplash.com/photo-1533130061792-64b345e4a833?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+        'https://images.unsplash.com/photo-1526712318848-5f38e2740d44?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+        'https://images.unsplash.com/photo-1592285896110-8d88b5b3a5d8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80',
+        'https://images.unsplash.com/photo-1611516491426-03025e6043c8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1633&q=80',
+        'https://images.unsplash.com/photo-1544735716-392fe2489ffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80',
+        'https://images.unsplash.com/photo-1571401835393-8c5f35328320?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80'
+            // Add more image URLs here
+        ];
 
+        // Get the HTML element
+        var htmlElement = document.querySelector('html');
+
+        // Get the change button element
+        var changeButton = document.getElementById('btnRandom');
+
+        // Variable to store the current index of the background image
+        var currentIndex = 0;
+
+        // Function to change the background image
+        function changeBackgroundImage() {
+            // Increment the index or reset to 0 if it reaches the end
+            currentIndex = (currentIndex + 1) % backgroundImages.length;
+
+            // Set the background image
+            htmlElement.style.backgroundImage = 'url(' + backgroundImages[currentIndex] + ')';
+        }
+
+        // Attach the click event listener to the change button
+        changeButton.addEventListener('click', changeBackgroundImage);
+
+        // Function to get a random quote
         function getRandomQuote() {
-            fetch('./quotes/metadata.json').then(r => r.json()).then(metadata => {
-                let randomPage = random(1, metadata.totalPages);
-                fetch('./quotes/' + randomPage + '.json').then(r => r.json()).then(quotesData => {
-                    let randomQuote = quotesData[random(0, quotesData.length - 1)];
-                    document.getElementById("randomQuoteText").innerHTML = randomQuote.text;
-                    document.getElementById('randomQuoteAuthor').innerHTML = randomQuote.author;
+            // Fetch the quotes from the JSON file
+            fetch('./quotes/metadata.json')
+                .then(response => response.json())
+                .then(data => {
+                    // Get a random quote from the loaded data
+                    var randomQuote = data[Math.floor(Math.random() * data.length)];
+                    document.getElementById('randomQuoteText').innerHTML = randomQuote.text;
+                    document.getElementById('randomQuoteAuthor').innerHTML = '- ' + randomQuote.author;
                 })
-            })
+                .catch(error => {
+                    console.log('Error:', error);
+                });
         }
 
-        function random(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
+        // Attach the click event listener to the change button to get a random quote
+        changeButton.addEventListener('click', getRandomQuote);
 
+        // Initialize with a random quote and background image
+        changeBackgroundImage();
         getRandomQuote();
-        document.getElementById('btnRandom').onclick = () => getRandomQuote();
-
     </script>
 </body>
 
